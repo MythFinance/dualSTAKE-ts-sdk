@@ -104,7 +104,7 @@ export function genLease() {
   return new Uint8Array(b);
 }
 
-export function ContractListingFromTupleFixed(abiTuple: [bigint, bigint, bigint, bigint, bigint, string, bigint, string, string, number, boolean, boolean, boolean]): ContractListing {
+export function ContractListingFromTupleFixed(abiTuple: [bigint, bigint, bigint, bigint, bigint, string, bigint, string, string, number, boolean, boolean, boolean, bigint]): ContractListing {
   const listing = ContractListingFromTuple(abiTuple)
   return fixContractListing(listing);
 }
