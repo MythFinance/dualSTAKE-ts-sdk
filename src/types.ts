@@ -75,6 +75,7 @@ export interface DSContractListing {
   needSwap: boolean;
   incentiveEligible: boolean;
   isOnline: boolean;
+  upgrading: boolean;
   userProtestingStake: bigint;
 }
 
