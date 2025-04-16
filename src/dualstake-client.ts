@@ -679,22 +679,26 @@ export class DualStakeClient extends BaseClient {
       ...userNetworkConstants,
     };
 
+    const args = {
+      asaId: asaId,
+      delayOptin: delayOptin,
+      lpType: strToUint(lpType),
+      lpId: algosdk.decodeAddress(lpId).publicKey,
+      platformFeeBps: platformFeeBps,
+      noderunnerFeeBps: noderunnerFeeBps,
+      adminAddr: adminAddr,
+      feeAdminAddr: feeAdminAddr,
+      noderunnerAddr: noderunnerAddr,
+      ...networkConstants,
+    };
+
     const {
       transactions: [appCallTxn],
     } = await this.client.createTransaction.configure({
-      args: {
-        asaId: asaId,
-        delayOptin: delayOptin,
-        lpType: strToUint(lpType),
-        lpId: algosdk.decodeAddress(lpId).publicKey,
-        platformFeeBps: platformFeeBps,
-        noderunnerFeeBps: noderunnerFeeBps,
-        adminAddr: adminAddr,
-        feeAdminAddr: feeAdminAddr,
-        noderunnerAddr: noderunnerAddr,
-        ...networkConstants,
-      },
+      args,
       assetReferences: [asaId],
+      appReferences: [args.tm2AppId, args.arc59AppId],
+      accountReferences: [algosdk.encodeAddress(args.lpId)],
     });
 
     txns.push(appCallTxn);
