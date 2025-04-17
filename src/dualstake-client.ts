@@ -71,7 +71,11 @@ export class DualStakeClient extends BaseClient {
    */
 
   async getListing(): Promise<DSContractListing> {
-    const res = await this.client.newGroup().getContractListing().simulate({
+    const res = await this.client.newGroup().getContractListing({
+      args: {
+        user: this.config.sender,
+      }
+    }).simulate({
       allowUnnamedResources: true,
       extraOpcodeBudget: 5500,
       fixSigners: true,

@@ -1,7 +1,7 @@
 {
   "name": "@myth-finance/dualstake-ts-sdk",
   "type": "module",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "",
   "main": "dist/index.js",
   "exports": {
