@@ -76,6 +76,7 @@ export class DualStakeRegistryClient extends BaseClient {
         extraOpcodeBudget: 170013,
         fixSigners: true,
         allowEmptySignatures: true,
+        allowMoreLogging: true,
       });
 
     const round = BigInt(lastRound);
