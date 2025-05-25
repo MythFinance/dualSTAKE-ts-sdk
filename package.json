@@ -1,7 +1,7 @@
 {
   "name": "@myth-finance/dualstake-ts-sdk",
   "type": "module",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "",
   "main": "dist/index.js",
   "exports": {
@@ -30,6 +30,7 @@
   },
   "peerDependencies": {
     "algosdk": "^2.9.0",
-    "@algorandfoundation/algokit-utils": "^7.0.2"
+    "@algorandfoundation/algokit-utils": "^7.0.2",
+    "js-sha512": "^0.8.0"
   }
 }

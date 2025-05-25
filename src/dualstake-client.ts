@@ -1,4 +1,9 @@
-import algosdk from "algosdk";
+import algosdk, {
+  ABIMethod,
+  ABITupleType,
+  ABIValue,
+  indexerModels,
+} from "algosdk";
 import { Buffer } from "buffer";
 import { DualStakeContractClient as GeneratedDualStakeContractClient } from "./generated/dualstake-contract-client.js";
 import {
@@ -26,9 +31,11 @@ import {
   MakeUpdateMaxBalanceArgs,
   MakeConfigure2TransactionArgs,
   MakeUpdateMaxBalanceTransactionsArgs,
+  ParsedArc28EventSpec,
+  EmittedArc28Event,
+  EmittedArc28EventAndTransaction,
 } from "./types.js";
 import {
-  uintToStr,
   isOptedIn,
   parseFeeUpdate,
   stateToAddress,
@@ -36,13 +43,20 @@ import {
   strToUint,
   groupTxns,
   fixContractListing,
+  parseArc28EventSpec,
+  createMethodSelectorMap,
 } from "./utils.js";
 import { BaseClient } from "./base-client.js";
 import { networkConstants as defaultNetworkConstants } from "./network-constants.js";
+import { eventSpec } from "./generated/dualstake.arc28.js";
+
+const events = eventSpec.map((eventSpec) => parseArc28EventSpec(eventSpec));
 
 export class DualStakeClient extends BaseClient {
   asaId?: bigint;
   lstId?: bigint;
+  methodSelectorMap: Map<string, ABIMethod>;
+  events?: ParsedArc28EventSpec[];
 
   contractSchema = {
     extraPages: 3,
@@ -58,6 +72,8 @@ export class DualStakeClient extends BaseClient {
     public from: string
   ) {
     super(client, config.algorand, from);
+    this.methodSelectorMap = createMethodSelectorMap(client.appSpec);
+    this.events = events;
   }
 
   async init() {
@@ -66,21 +82,91 @@ export class DualStakeClient extends BaseClient {
     }
   }
 
+  getParsedArc28EventsFromTransaction(
+    transaction: indexerModels.Transaction,
+    outerTransaction?: indexerModels.Transaction
+  ): EmittedArc28EventAndTransaction[] {
+    outerTransaction = outerTransaction ?? transaction;
+    const retVal: EmittedArc28EventAndTransaction[] = [];
+    if (
+      BigInt(transaction.applicationTransaction?.applicationId ?? "9") ===
+      this.appId
+    ) {
+      if (transaction.logs) {
+        const events = this.parseArc28Events(
+          transaction.logs as unknown as string[]
+        ).map((e) => ({
+          ...e,
+          outerTransaction: outerTransaction!,
+          logTransaction: transaction,
+        }));
+        if (events.length) retVal.push(...events);
+      }
+    }
+    if (transaction.innerTxns) {
+      for (const inner of transaction.innerTxns) {
+        const events = this.getParsedArc28EventsFromTransaction(
+          inner,
+          outerTransaction
+        );
+        if (events.length) retVal.push(...events);
+      }
+    }
+    return retVal;
+  }
+
+  parseArc28Events(logs: string[]): EmittedArc28Event[] {
+    if (this.events === undefined) {
+      throw new Error(`Can not parse arc28 events: event spec not defined`);
+    }
+    return logs
+      .filter((log) => log.length > 4)
+      .flatMap((logStr) => {
+        const log = Buffer.from(logStr, "base64");
+        const prefix = log.slice(0, 4).toString("hex");
+        const event = this.events!.find((e) => e.prefix === prefix);
+        if (!event) return;
+        const args: ABIValue[] = [];
+        const argsByName: Record<string, ABIValue> = {};
+
+        const type = ABITupleType.from(
+          `(${event.args.map((a) => a.type).join(",")})`
+        );
+        const value = type.decode(Buffer.from(log.slice(4))) as any[];
+
+        event.args.forEach((a, i) => {
+          args.push(value[i]);
+          if (a.name) {
+            argsByName[a.name] = value[i];
+          }
+        });
+        return {
+          spec: event,
+          args,
+          argsByName,
+        } satisfies EmittedArc28Event;
+      })
+      .filter((e) => !!e) as EmittedArc28Event[];
+  }
+
   /*
    * read state methods
    */
 
   async getListing(): Promise<DSContractListing> {
-    const res = await this.client.newGroup().getContractListing({
-      args: {
-        user: this.config.sender,
-      }
-    }).simulate({
-      allowUnnamedResources: true,
-      extraOpcodeBudget: 5500,
-      fixSigners: true,
-      allowEmptySignatures: true,
-    });
+    const res = await this.client
+      .newGroup()
+      .getContractListing({
+        args: {
+          user: this.config.sender,
+        },
+      })
+      .simulate({
+        allowUnnamedResources: true,
+        extraOpcodeBudget: 5500,
+        fixSigners: true,
+        allowEmptySignatures: true,
+      });
 
     const listing = fixContractListing(res.returns[0]!);
 
@@ -489,7 +575,6 @@ export class DualStakeClient extends BaseClient {
     firstRound,
     lastRound,
     keyDilution,
-    fee,
   }: MakeKeyregOnlineTransactionsArgs): Promise<algosdk.EncodedTransaction[]> {
     const { "incentive-eligible": ie } = await this.algod
       .accountInformation(this.appAddr)

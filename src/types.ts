@@ -1,5 +1,5 @@
 import { AlgorandClient, getIndexerConfigFromEnvironment } from "@algorandfoundation/algokit-utils";
-import algosdk from "algosdk";
+import { ABIValue, indexerModels } from "algosdk";
 
 export interface ContractSchema {
   extraPages: number;
@@ -46,6 +46,29 @@ export interface DSContractMapping {
   asaId: bigint;
   appId: bigint;
   lstId: bigint;
+}
+
+export interface Arc28EventSpec {
+  name: string
+  args: Array<{
+    type: string
+    name: string
+  }>
+}
+
+export interface ParsedArc28EventSpec extends Arc28EventSpec {
+  prefix: string
+}
+
+export interface EmittedArc28Event {
+  spec: ParsedArc28EventSpec;
+  args: ABIValue[];
+  argsByName: Record<string, ABIValue>;
+}
+
+export interface EmittedArc28EventAndTransaction extends EmittedArc28Event {
+  outerTransaction: indexerModels.Transaction
+  logTransaction: indexerModels.Transaction
 }
 
 export interface FeeUpdateState {
