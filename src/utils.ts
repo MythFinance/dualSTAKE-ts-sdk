@@ -113,3 +113,28 @@ export function fixContractListing(listing: ContractListing): ContractListing {
   listing.asaDecimals = Number(listing.asaDecimals)
   return listing
 }
+
+export function mergeMaps<K, V>(...maps: Map<K, V>[]): Map<K, V> {
+  const result = new Map<K, V>();
+  for (const map of maps) {
+    for (const [key, value] of map) {
+      result.set(key, value);
+    }
+  }
+  return result;
+}
+
+function logRefs(grp: algosdk.modelsv2.SimulateTransactionGroupResult) {
+  const {
+    accounts = [],
+    apps = [],
+    assets = [],
+    boxes = [],
+  } = grp.unnamedResourcesAccessed ?? {};
+  const acctRefs = accounts.length;
+  const appRefs = apps.length;
+  const assetRefs = assets.length;
+  const boxRefs = boxes.length;
+  console.log({ acctRefs, appRefs, assetRefs, boxRefs });
+  console.log("Total refs:", acctRefs + appRefs + assetRefs + boxRefs);
+}

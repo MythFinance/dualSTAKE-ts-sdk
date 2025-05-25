@@ -1,8 +1,7 @@
 import algosdk, { ABIMethod } from "algosdk";
 import { RegistryContractClient as GeneratedRegistryContractClient } from "./generated/registry-contract-client.js";
 import {
-  ContractListing,
-  ContractListingFromTuple,
+  ContractListing
 } from "./generated/dualstake-contract-client.js";
 import {
   DSContractListing,
@@ -13,12 +12,16 @@ import {
 } from "./types.js";
 import { BaseClient } from "./base-client.js";
 import { AlgorandClient } from "@algorandfoundation/algokit-utils";
-import { ContractListingFromTupleFixed, genLease, groupTxns, strToUint } from "./utils.js";
-import { DualStakeClient } from "./dualstake-client.js";
+import {
+  ContractListingFromTupleFixed,
+  genLease,
+  groupTxns,
+  strToUint,
+} from "./utils.js";
 import { GeneratedDualStakeContractClient } from "./index.js";
 
 export class DualStakeRegistryClient extends BaseClient {
-  private getContractListingABImethod: ABIMethod
+  private getContractListingABImethod: ABIMethod;
 
   contractSchema = {
     extraPages: 3,
@@ -67,7 +70,7 @@ export class DualStakeRegistryClient extends BaseClient {
   ): Promise<Map<bigint, DSContractListing>> {
     const {
       confirmations: [{ logs }],
-      simulateResponse: { lastRound },
+      simulateResponse: { lastRound, /* txnGroups */ },
     } = await this.client
       .newGroup()
       .logDualstakeListings({ args: { appIds } })
@@ -78,7 +81,8 @@ export class DualStakeRegistryClient extends BaseClient {
         allowEmptySignatures: true,
         allowMoreLogging: true,
       });
-
+    
+    // logRefs(txnGroups[0]);
     const round = BigInt(lastRound);
 
     const retMap = new Map<bigint, DSContractListing>();

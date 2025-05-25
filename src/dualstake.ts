@@ -15,6 +15,7 @@ import {
 import { RegistryContractClient as GeneratedRegistryContractClient } from "./generated/registry-contract-client.js";
 import { DualStakeClient } from "./dualstake-client.js";
 import { DualStakeRegistryClient } from "./registry-client.js";
+import { chunk, mergeMaps } from "./utils.js";
 
 export class DualStake {
   // simulate request concurrency
@@ -87,7 +88,9 @@ export class DualStake {
     appIds: bigint[],
   ): Promise<Map<bigint, DSContractListing>> {
     // get app IDs from registry contract box
-    // TODO chunk / pMap
-    return DualStake.getRegistryAppClient(config).getContractListings(appIds)
+    const chunks = chunk(appIds, 32)
+    const client = DualStake.getRegistryAppClient(config)
+    const data = await Promise.all(chunks.map(appIds => client.getContractListings(appIds)))
+    return mergeMaps(...data)
   }
 }
