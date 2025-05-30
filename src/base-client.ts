@@ -1,14 +1,14 @@
 import algosdk from "algosdk";
 import { RegistryContractClient as GeneratedRegistryContractClient } from "./generated/registry-contract-client.js";
 import { DualStakeContractClient as GeneratedDualStakeContractClient } from "./generated/dualstake-contract-client.js";
-import { networkConstants } from "./network-constants.js";
+import { DualstakePriceOracleClient as GeneratedDualstakePriceOracleClient } from "./generated/dualstake-price-oracle-contract-client.js";
 import {
   ContractSchema,
   Environment,
   MakeCreateTransactionsArgs,
   NetworkConstants,
 } from "./types.js";
-import { replaceTemplateVars, compile } from "./utils.js";
+import { compile } from "./utils.js";
 import { AlgorandClient } from "@algorandfoundation/algokit-utils";
 
 export abstract class BaseClient {
@@ -17,7 +17,8 @@ export abstract class BaseClient {
   constructor(
     public client:
       | GeneratedDualStakeContractClient
-      | GeneratedRegistryContractClient,
+      | GeneratedRegistryContractClient
+      | GeneratedDualstakePriceOracleClient,
     public algorand: AlgorandClient,
     public from: string
   ) {}
@@ -39,8 +40,8 @@ export abstract class BaseClient {
    */
 
   getApprovalSource(
-    env: Environment,
-    overrides?: Partial<NetworkConstants>
+    _env: Environment,
+    _overrides?: Partial<NetworkConstants>
   ): string {
     const { approval } = this.client.appSpec.source ?? {};
     if (!approval) {

@@ -156,20 +156,20 @@ export function mergeMaps<K, V>(...maps: Map<K, V>[]): Map<K, V> {
   return result;
 }
 
-function logRefs(grp: algosdk.modelsv2.SimulateTransactionGroupResult) {
-  const {
-    accounts = [],
-    apps = [],
-    assets = [],
-    boxes = [],
-  } = grp.unnamedResourcesAccessed ?? {};
-  const acctRefs = accounts.length;
-  const appRefs = apps.length;
-  const assetRefs = assets.length;
-  const boxRefs = boxes.length;
-  console.log({ acctRefs, appRefs, assetRefs, boxRefs });
-  console.log("Total refs:", acctRefs + appRefs + assetRefs + boxRefs);
-}
+// function logRefs(grp: algosdk.modelsv2.SimulateTransactionGroupResult) {
+//   const {
+//     accounts = [],
+//     apps = [],
+//     assets = [],
+//     boxes = [],
+//   } = grp.unnamedResourcesAccessed ?? {};
+//   const acctRefs = accounts.length;
+//   const appRefs = apps.length;
+//   const assetRefs = assets.length;
+//   const boxRefs = boxes.length;
+//   console.log({ acctRefs, appRefs, assetRefs, boxRefs });
+//   console.log("Total refs:", acctRefs + appRefs + assetRefs + boxRefs);
+// }
 
 export function parseArc28EventSpec(e: Arc28EventSpec): ParsedArc28EventSpec {
   // https://github.com/algorandfoundation/ARCs/blob/main/ARCs/arc-0028.md#sample-interpretation-of-event-log-data

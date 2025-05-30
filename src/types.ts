@@ -1,5 +1,6 @@
 import { AlgorandClient, getIndexerConfigFromEnvironment } from "@algorandfoundation/algokit-utils";
 import { ABIValue, indexerModels } from "algosdk";
+import { PriceAndTvl } from "./generated/dualstake-price-oracle-contract-client.js";
 
 export interface ContractSchema {
   extraPages: number;
@@ -42,10 +43,27 @@ export interface DSContractConfig extends DSEnvironmentConfig {
   appId: bigint;
 }
 
+export interface DSPriceOracleContractConfig extends DSEnvironmentConfig {
+  priceOracleAppId: bigint;
+}
+
 export interface DSContractMapping {
   asaId: bigint;
   appId: bigint;
   lstId: bigint;
+}
+
+export interface DSPriceAndTVL extends PriceAndTvl {
+  // dualSTAKE app ID
+  appId: bigint;
+  // dualSTAKE ASA ID
+  dualStakeAsaId: bigint;
+  // dualSTAKE ASA asset name
+  dualStakeName: string;
+  // Paired ASA ID
+  pairedAsaId: bigint;
+  // Paired ASA unit name
+  pairedAsaUnitName: string;
 }
 
 export interface Arc28EventSpec {

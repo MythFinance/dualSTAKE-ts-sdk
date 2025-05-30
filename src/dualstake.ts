@@ -7,6 +7,8 @@ import {
   GetRegistryAppClientArgs,
   DSContractConfig,
   DSContractListing,
+  DSPriceAndTVL,
+  DSPriceOracleContractConfig,
 } from "./types.js";
 import {
   DualStakeContractClient as GeneratedDualStakeContractClient,
@@ -16,6 +18,11 @@ import { RegistryContractClient as GeneratedRegistryContractClient } from "./gen
 import { DualStakeClient } from "./dualstake-client.js";
 import { DualStakeRegistryClient } from "./registry-client.js";
 import { chunk, mergeMaps } from "./utils.js";
+import {
+  DualstakePriceOracleClient as GeneratedDualstakePriceOracleClient,
+  PriceAndTvl,
+} from "./generated/dualstake-price-oracle-contract-client.js";
+import { DualStakePriceOracleClient } from "./price-oracle-client.js";
 
 export class DualStake {
   // simulate request concurrency
@@ -77,7 +84,7 @@ export class DualStake {
     config: DSEnvironmentConfig
   ): Promise<Map<bigint, DSContractListing>> {
     // get app IDs from registry contract box
-    const appIds = await DualStake.getAvailableContractIDs(config)
+    const appIds = await DualStake.getAvailableContractIDs(config);
     // iterate app IDs, create client and simulate the listing read call
     return DualStake.getContractListings(config, appIds);
   }
@@ -85,12 +92,63 @@ export class DualStake {
   // Get available contracts' listings
   static async getContractListings(
     config: DSEnvironmentConfig,
-    appIds: bigint[],
+    appIds: bigint[]
   ): Promise<Map<bigint, DSContractListing>> {
     // get app IDs from registry contract box
-    const chunks = chunk(appIds, 32)
-    const client = DualStake.getRegistryAppClient(config)
-    const data = await Promise.all(chunks.map(appIds => client.getContractListings(appIds)))
-    return mergeMaps(...data)
+    const chunks = chunk(appIds, 32);
+    const client = DualStake.getRegistryAppClient(config);
+    const data = await Promise.all(
+      chunks.map((appIds) => client.getContractListings(appIds))
+    );
+    return mergeMaps(...data);
+  }
+
+  // Get algokit generated client for price oracle app
+  static getPriceOracleAppClient(config: DSPriceOracleContractConfig) {
+    const { priceOracleAppId, sender } = config;
+    const generatedClient = new GeneratedDualstakePriceOracleClient({
+      algorand: config.algorand,
+      appId: BigInt(priceOracleAppId),
+      defaultSender: sender,
+      defaultSigner: algosdk.makeEmptyTransactionSigner(),
+    });
+    return new DualStakePriceOracleClient(generatedClient, config, sender);
+  }
+
+  static async getAvailablePricesAndTVL(
+    config: DSPriceOracleContractConfig
+  ): Promise<Map<bigint, DSPriceAndTVL>> {
+    const listings = await DualStake.getAvailableContractListings(config);
+    return DualStake.getPricesAndTVL(config, [...listings.values()]);
+  }
+
+  static async getPricesAndTVL(
+    config: DSPriceOracleContractConfig,
+    appIdsOrListings: (bigint | DSContractListing)[]
+  ): Promise<Map<bigint, DSPriceAndTVL>> {
+    const appIds = appIdsOrListings.map((a) =>
+      typeof a === "bigint" ? a : a.appId
+    );
+    const listingsHave = appIdsOrListings.filter((a) => typeof a !== "bigint");
+    const listingsNeed = appIdsOrListings.filter((a) => typeof a === "bigint");
+    const listingsMap = new Map<bigint, DSContractListing>(
+      listingsHave.map((listing) => [listing.appId, listing])
+    );
+    if (listingsNeed.length) {
+      const { priceOracleAppId, ...envConfig } = config;
+      const missingListings = await DualStake.getContractListings(
+        envConfig,
+        listingsNeed
+      );
+      for (const missingListing of missingListings.values()) {
+        listingsMap.set(missingListing.appId, missingListing);
+      }
+    }
+    const chunks = chunk(appIds, 42);
+    const client = DualStake.getPriceOracleAppClient(config);
+    const data = await Promise.all(
+      chunks.map((appIds) => client.getPricesAndTVL([...listingsMap.values()]))
+    );
+    return mergeMaps(...data);
   }
 }
