@@ -8,21 +8,18 @@ importers:
 
   .:
     dependencies:
-      '@algorandfoundation/algokit-client-generator':
-        specifier: ^4.0.9
-        version: 4.0.9(@algorandfoundation/algokit-utils@7.1.0(algosdk@2.11.0))(algosdk@2.11.0)
       '@algorandfoundation/algokit-utils':
         specifier: ^7.0.2
         version: 7.1.0(algosdk@2.11.0)
       algosdk:
-        specifier: ^2.9.0
+        specifier: ^2.11.0
         version: 2.11.0
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
       js-sha512:
-        specifier: ^0.8.0
-        version: 0.8.0
+        specifier: ^0.9.0
+        version: 0.9.0
       p-map:
         specifier: ^7.0.3
         version: 7.0.3
@@ -38,14 +35,6 @@ importers:
         version: 5.8.3
 
 packages:
-
-  '@algorandfoundation/algokit-client-generator@4.0.9':
-    resolution: {integrity: sha512-8s11VVO7+dumRctXUUME2aWpEOjEWZJZEPqMJt9ADIMrPMXw/3O0+Sc1fvLqX7vWIp22oqvuFGkGC7HleBvfEQ==}
-    engines: {node: '>=20.0'}
-    hasBin: true
-    peerDependencies:
-      '@algorandfoundation/algokit-utils': ^7.0.1 || ^8.0.1
-      algosdk: ^2.9.0 || ^3.0.0
 
   '@algorandfoundation/algokit-utils@7.1.0':
     resolution: {integrity: sha512-cetYNuqdxuWt3CyNcWPU1HWoPcsoCi4xkUD1u0/YTMSc+ttiEvPJBu2p6eS1MvCkVleG3h0N3ycEXpyS9Ox0bg==}
@@ -214,10 +203,6 @@ packages:
     resolution: {integrity: sha512-MJ9xrjBKqG6ItCAR0Z974DG7nvifXsQxlj7HbWkBat4+h/IygwKPEH/v0dQPOYWdTcf5/5lfu+OyEVOsjxvyRQ==}
     engines: {node: '>=18.0.0'}
 
-  ansi-styles@4.3.0:
-    resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
-    engines: {node: '>=8'}
-
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
@@ -226,24 +211,6 @@ packages:
 
   buffer@6.0.3:
     resolution: {integrity: sha512-FTiCpNxtwiZZHEZbcbTIcZjERVICn9yq/pDFkTl95/AxzD1naBctN7YO68riM/gLSDY7sdrMby8hofADYuuqOA==}
-
-  chalk@4.1.2:
-    resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
-    engines: {node: '>=10'}
-
-  change-case@5.4.4:
-    resolution: {integrity: sha512-HRQyTk2/YPEkt9TnUPbOpr64Uw3KOicFWPVBb+xiHvd6eBx/qPr9xqfBFDT8P2vWsvvz4jbEkfDe71W3VyNu2w==}
-
-  color-convert@2.0.1:
-    resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
-    engines: {node: '>=7.0.0'}
-
-  color-name@1.1.4:
-    resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
-
-  commander@11.1.0:
-    resolution: {integrity: sha512-yPVavfyCcRhmorC7rWlkHn15b4wDVgVmBA7kV4QVBsF7kv/9TKJAbAXVTxvTnwP8HHKjRCJDClKbciiYS7p0DQ==}
-    engines: {node: '>=16'}
 
   esbuild@0.25.2:
     resolution: {integrity: sha512-16854zccKPnC+toMywC+uKNeYSv+/eXkevRAfwRD/G9Cleq66m8XFIrigkbvauLLlCfDL45Q2cWegSg53gGBnQ==}
@@ -257,10 +224,6 @@ packages:
 
   get-tsconfig@4.10.0:
     resolution: {integrity: sha512-kGzZ3LWWQcGIAmg6iWvXn0ei6WDtV26wzHRMwDSzmAbcXrTEXxHy6IehI6/4eT6VRKyMP1eF1VqwrVUmE/LR7A==}
-
-  has-flag@4.0.0:
-    resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
-    engines: {node: '>=8'}
 
   hi-base32@0.5.1:
     resolution: {integrity: sha512-EmBBpvdYh/4XxsnUybsPag6VikPYnN30td+vQk+GI3qpahVEG9+gTkG0aXVxTjBqQ5T6ijbWIu77O+C5WFWsnA==}
@@ -277,11 +240,11 @@ packages:
   js-sha512@0.8.0:
     resolution: {integrity: sha512-PWsmefG6Jkodqt+ePTvBZCSMFgN7Clckjd0O7su3I0+BW2QWUTJNzjktHsztGLhncP2h8mcF9V9Y2Ha59pAViQ==}
 
+  js-sha512@0.9.0:
+    resolution: {integrity: sha512-mirki9WS/SUahm+1TbAPkqvbCiCfOAAsyXeHxK1UkullnJVVqoJG2pL9ObvT05CN+tM7fxhfYm0NbXn+1hWoZg==}
+
   json-bigint@1.0.0:
     resolution: {integrity: sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==}
-
-  jsonschema@1.5.0:
-    resolution: {integrity: sha512-K+A9hhqbn0f3pJX17Q/7H6yQfD/5OXgdrR5UE12gMXCiN9D5Xq2o5mddV2QEcX/bjla99ASsAAQUyMCCRWAEhw==}
 
   p-map@7.0.3:
     resolution: {integrity: sha512-VkndIv2fIB99swvQoA65bm+fsmt6UNdGeIB0oxBs+WhAhdh08QA04JXpI7rbB9r08/nkbysKoya9rtDERYOYMA==}
@@ -289,10 +252,6 @@ packages:
 
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
-
-  supports-color@7.2.0:
-    resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
-    engines: {node: '>=8'}
 
   tsx@4.19.3:
     resolution: {integrity: sha512-4H8vUNGNjQ4V2EOoGw005+c+dGuPSnhpPBPHBtsZdGZBk/iJb4kguGlPWaZTZ3q5nMtFOEsY0nRDlh9PJyd6SQ==}
@@ -314,15 +273,6 @@ packages:
     resolution: {integrity: sha512-aodjPa2wPQFkra1G8CzJBTHXhgk3EVSwxSWXNPr1fgdFLUb8kvLV1iEb6rFgasIsjP82HWI6dsb5Io26DDnasA==}
 
 snapshots:
-
-  '@algorandfoundation/algokit-client-generator@4.0.9(@algorandfoundation/algokit-utils@7.1.0(algosdk@2.11.0))(algosdk@2.11.0)':
-    dependencies:
-      '@algorandfoundation/algokit-utils': 7.1.0(algosdk@2.11.0)
-      algosdk: 2.11.0
-      chalk: 4.1.2
-      change-case: 5.4.4
-      commander: 11.1.0
-      jsonschema: 1.5.0
 
   '@algorandfoundation/algokit-utils@7.1.0(algosdk@2.11.0)':
     dependencies:
@@ -422,10 +372,6 @@ snapshots:
       tweetnacl: 1.0.3
       vlq: 2.0.4
 
-  ansi-styles@4.3.0:
-    dependencies:
-      color-convert: 2.0.1
-
   base64-js@1.5.1: {}
 
   bignumber.js@9.2.1: {}
@@ -434,21 +380,6 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
-
-  chalk@4.1.2:
-    dependencies:
-      ansi-styles: 4.3.0
-      supports-color: 7.2.0
-
-  change-case@5.4.4: {}
-
-  color-convert@2.0.1:
-    dependencies:
-      color-name: 1.1.4
-
-  color-name@1.1.4: {}
-
-  commander@11.1.0: {}
 
   esbuild@0.25.2:
     optionalDependencies:
@@ -485,8 +416,6 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  has-flag@4.0.0: {}
-
   hi-base32@0.5.1: {}
 
   ieee754@1.2.1: {}
@@ -497,19 +426,15 @@ snapshots:
 
   js-sha512@0.8.0: {}
 
+  js-sha512@0.9.0: {}
+
   json-bigint@1.0.0:
     dependencies:
       bignumber.js: 9.2.1
 
-  jsonschema@1.5.0: {}
-
   p-map@7.0.3: {}
 
   resolve-pkg-maps@1.0.0: {}
-
-  supports-color@7.2.0:
-    dependencies:
-      has-flag: 4.0.0
 
   tsx@4.19.3:
     dependencies:

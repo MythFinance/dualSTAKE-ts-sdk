@@ -1,6 +1,4 @@
-import * as algokit from "@algorandfoundation/algokit-utils";
 import algosdk from "algosdk";
-import pMap from "p-map";
 import {
   DSEnvironmentConfig,
   DSContractMapping,
@@ -11,16 +9,14 @@ import {
   DSPriceOracleContractConfig,
 } from "./types.js";
 import {
-  DualStakeContractClient as GeneratedDualStakeContractClient,
-  APP_SPEC as DualStakeAppSpec,
+  DualStakeContractClient as GeneratedDualStakeContractClient
 } from "./generated/dualstake-contract-client.js";
 import { RegistryContractClient as GeneratedRegistryContractClient } from "./generated/registry-contract-client.js";
 import { DualStakeClient } from "./dualstake-client.js";
 import { DualStakeRegistryClient } from "./registry-client.js";
 import { chunk, mergeMaps } from "./utils.js";
 import {
-  DualstakePriceOracleClient as GeneratedDualstakePriceOracleClient,
-  PriceAndTvl,
+  DualstakePriceOracleClient as GeneratedDualstakePriceOracleClient
 } from "./generated/dualstake-price-oracle-contract-client.js";
 import { DualStakePriceOracleClient } from "./price-oracle-client.js";
 
@@ -147,7 +143,7 @@ export class DualStake {
     const chunks = chunk(appIds, 42);
     const client = DualStake.getPriceOracleAppClient(config);
     const data = await Promise.all(
-      chunks.map((appIds) => client.getPricesAndTVL([...listingsMap.values()]))
+      chunks.map(() => client.getPricesAndTVL([...listingsMap.values()]))
     );
     return mergeMaps(...data);
   }
