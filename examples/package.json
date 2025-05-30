@@ -1,0 +1,23 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@myth-finance/dualstake-ts-sdk": "file:.."
+  },
+  "peerDependencies": {
+    "@algorandfoundation/algokit-utils": "^7.0.2",
+    "algosdk": "^2.11.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "tsx": "^4.19.4"
+  }
+}
