@@ -13,6 +13,8 @@ const sortedPriceData = [...priceMap.values()].sort(
 console.log("Sample")
 console.table(sortedPriceData[0]);
 
+// Note: all algo amounts are in microALGO
+
 // build up summary table
 const summary = {
   "Total TVL":
@@ -38,7 +40,7 @@ const table = Object.fromEntries(
   sortedPriceData.map((p) => [
     p.dualStakeName,
     {
-      "Price (ALGO)": decimalizeToString(p.dualstakeUnitPriceInAlgo, 6, 4),
+      "Price (ALGO)": decimalizeToString(p.dualStakeUnitPriceInAlgo, 6, 4),
       "Total TVL (ALGO)": decimalizeToString(p.totalTvlInAlgo),
       "ALGO TVL": decimalizeToString(p.algoTvlInAlgo),
       "ASA TVL (ALGO)": decimalizeToString(p.asaTvlInAlgo),

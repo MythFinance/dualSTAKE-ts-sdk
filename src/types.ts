@@ -53,13 +53,15 @@ export interface DSContractMapping {
   lstId: bigint;
 }
 
-export interface DSPriceAndTVL extends PriceAndTvl {
+export interface DSPriceAndTVL extends Omit<PriceAndTvl, "dualstakeAsaId" | "dualstakeUnitPriceInAlgo"> {
   // dualSTAKE app ID
   appId: bigint;
   // dualSTAKE ASA ID
   dualStakeAsaId: bigint;
   // dualSTAKE ASA asset name
   dualStakeName: string;
+  // dualSTAKE Unit price
+  dualStakeUnitPriceInAlgo: bigint
   // Paired ASA ID
   pairedAsaId: bigint;
   // Paired ASA unit name

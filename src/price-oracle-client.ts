@@ -1,10 +1,12 @@
 import {
-  DSContractListing, DSPriceAndTVL,
-  DSPriceOracleContractConfig
+  DSContractListing,
+  DSPriceAndTVL,
+  DSPriceOracleContractConfig,
 } from "./types.js";
 import { BaseClient } from "./base-client.js";
 import {
-  DualstakePriceOracleClient as GeneratedDualstakePriceOracleClient, PriceAndTvlFromTuple
+  DualstakePriceOracleClient as GeneratedDualstakePriceOracleClient,
+  PriceAndTvlFromTuple,
 } from "./generated/dualstake-price-oracle-contract-client.js";
 
 export class DualStakePriceOracleClient extends BaseClient {
@@ -55,10 +57,11 @@ export class DualStakePriceOracleClient extends BaseClient {
     for (let idx = 0; idx < logs.length; idx++) {
       const appId = appIds[idx];
       const method = this.client.appClient.getABIMethod("get_price_and_tvl");
-      const tvlState = PriceAndTvlFromTuple(
-        // @ts-ignore
-        method.returns.type.decode(logs[idx])
-      );
+      const { dualstakeUnitPriceInAlgo, dualstakeAsaId, ...tvlState } =
+        PriceAndTvlFromTuple(
+          // @ts-ignore
+          method.returns.type.decode(logs[idx])
+        );
       const listing = listingsMap.get(appId)!;
       tvlStates.set(appId, {
         appId,
@@ -66,6 +69,7 @@ export class DualStakePriceOracleClient extends BaseClient {
         dualStakeName: listing.lstName,
         pairedAsaId: listing.asaId,
         pairedAsaUnitName: listing.asaUnitName,
+        dualStakeUnitPriceInAlgo: dualstakeUnitPriceInAlgo,
         ...tvlState,
       });
     }
